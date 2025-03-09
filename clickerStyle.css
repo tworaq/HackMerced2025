@@ -81,6 +81,7 @@ body{
 	margin-top: 1%;
 	margin-left: 8%;
 	font-size: 45px;
+	color:#3d405b;
 	}
 a {
 	color: #fff;
@@ -88,3 +89,15 @@ a {
 a:hover {
 	color:#CEEEE8;
 	}
+#myChart {
+           max-width: 600px; /* Adjust the width as needed */
+           max-height: 400px; /* Adjust the height as needed */
+           margin-left: 8%;
+       }
+       #workButton {
+           margin-top: 20px;
+       }
+       #balanceDisplay, #clickCountDisplay {
+           margin-top: 20px;
+           font-size: 1.5em;
+       }
