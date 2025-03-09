@@ -39,11 +39,11 @@
                     }
                     function goToCollege() {
                         if (balance >= 56000) {
-                            wage = 27;
+                            wage = 30000;
                             spendMoney(56000);
-                            updateText("bottomText", "You got a raise!", "");
                             updateText("button0", "Go to Work (+$", wage + ")");
                             decreaseBalanceOnGraph(56000); // Decrease balance on the graph
+                            document.getElementById("optionButtonArea").textContent = "";
                         } else {
                             updateText("bottomText", "Not enough money to go to college!", "");
                         }
@@ -208,7 +208,7 @@
     </script>
     </div></div>
     <div id="optionButton"> <div class="optionButton-text">
-    <h2><button id="optionButton" onclick="goToCollege()">Get a Bachelor's Degree (-$56000)</button></h2>
+    <h2 id="optionButtonArea"><button id="optionButton" onclick="goToCollege()">Get a Bachelor's Degree (-$56000)</button></h2>
     </div></div>
     </div>
 </body>
