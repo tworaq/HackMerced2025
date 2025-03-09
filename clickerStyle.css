@@ -14,6 +14,7 @@ body{
 	background-size: cover;
 	background-position: center;
 	background-attachment: fixed;
+	margin-left: 30%;
 	}
 /*basic info*/
 #header{
@@ -53,17 +54,15 @@ body{
 	}
 .header-text h5{
 	margin-top: 1%;
-	margin-left: 8%;
 	font-size: 20px;
 	color:#9ed894;
 	}
 .header-logo {
-	margin-left: 38%;
+	margin-left: 8%;
 	}
 .workButton-text button{
 	font-size: 50px;
 	margin-top: 10px;
-	margin-left: 8%;
 	color:#9ed894;
 	background:#3d405b;
 	}
@@ -73,7 +72,6 @@ body{
 .optionButton-text button{
 	font-size: 30px;
 	margin-top: 10px;
-	margin-left: 8%;
 	color:#9ed894;
 	background:#3d405b;
 	}
@@ -82,7 +80,6 @@ body{
 	}
 .graph-text h2{
 	margin-top: 1%;
-	margin-left: 8%;
 	font-size: 45px;
 	color:#3d405b;
 	}
