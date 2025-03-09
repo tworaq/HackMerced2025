@@ -57,6 +57,10 @@ body{
 	font-size: 20px;
 	color:#9ed894;
 	}
+#logo {
+	margin-left: 50%;
+	margin-right: 50%;
+	}
 .workButton-text button{
 	font-size: 50px;
 	margin-top: 10px;
