@@ -17,7 +17,7 @@
                 <script>
                     var balance = 0;
                     var totalEarned = 0;
-                    var wage = 12000;
+                    var wage = 16640;
                     var customEarnings = 0;
                     var customClicks = 0;
                     var cumulativeClicks = 0;
@@ -39,7 +39,7 @@
                     }
                     function goToCollege() {
                         if (balance >= 56000) {
-                            wage = 30000;
+                            wage = 33300;
                             spendMoney(56000);
                             updateText("button0", "Go to Work (+$", wage + ")");
                             decreaseBalanceOnGraph(56000); // Decrease balance on the graph
@@ -48,6 +48,22 @@
                             updateText("bottomText", "Not enough money to go to college!", "");
                         }
                     }
+                    function endGame() {
+                        clearInterval(sanJoaquinInterval);
+                        clearInterval(bayAreaInterval);
+                        clearInterval(customInterval);
+
+                        const sanJoaquinTotal = sanJoaquinData[sanJoaquinIndex];
+                        const bayAreaTotal = bayAreaData[bayAreaIndex];
+
+                        const totalEarningsText = "Total Wages Earned:<br>" +
+                              "San Joaquin Valley: $" + Math.round(sanJoaquinTotal) + "<br>" +
+                              "Bay Area: $" + Math.round(bayAreaTotal) + "<br>" +
+                              "User Earnings: $" + totalEarned;
+
+                        document.getElementById("totalEarningsDisplay").innerHTML = totalEarningsText;
+}
+                    
                 </script>
             </div>
     </div>
@@ -57,8 +73,10 @@
     <div id="workButton"> <div class="workButton-text">
         <h1 id="startButtonArea"><button id="startButton" onclick="startGraph()">Start</button></h1>
         <h1><button id="button0" onclick="earnMoney()">Go to Work (+$<script>document.write(wage)</script>)</button></h1>
+        <h1><button id="endButton" onclick="endGame()">End Game</button></h1> <!-- Added End Game button -->
         <h3 id="balanceDisplay">Money: $<script>document.write(balance)</script></h3>
         <h3 id="clickCountDisplay">Click Count: <script>document.write(cumulativeClicks)</script></h3>
+        <h3 id="totalEarningsDisplay"></h3>
     </div></div>
     
     <script>
@@ -136,7 +154,7 @@
                     tension: 0.4
                 },
                 {
-                    label: 'Custom Earnings',
+                    label: 'User Earnings',
                     data: customEarningsData,
                     borderColor: 'green',
                     backgroundColor: 'lightgreen',
@@ -199,12 +217,17 @@
             }
         }
 
-        function startGraph() {
-            setInterval(updateSanJoaquinEarnings, 1000); // Update the San Joaquin Valley line every 1 second
-            setInterval(updateBayAreaEarnings, 1000); // Update the Bay Area line every 1 second
-            setInterval(updateCustomEarnings, 1000); // Update the Custom Earnings line every 1 second
-            document.getElementById("startButtonArea").textContent = "";
-        }
+        
+        let sanJoaquinInterval, bayAreaInterval, customInterval;
+
+    function startGraph() {
+        sanJoaquinInterval = setInterval(updateSanJoaquinEarnings, 1000); // Update the San Joaquin Valley line every 1 second
+        bayAreaInterval = setInterval(updateBayAreaEarnings, 1000); // Update the Bay Area line every 1 second
+        customInterval = setInterval(updateCustomEarnings, 1000); // Update the Custom Earnings line every 1 second
+        document.getElementById("startButtonArea").textContent = "";
+    }
+
+    
     </script>
     </div></div>
     <div id="optionButton"> <div class="optionButton-text">
