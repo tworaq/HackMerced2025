@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clicker with Economic Growth Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="clickerStyle.css">
+    <style>
+        #myChart {
+            max-width: 600px; /* Adjust the width as needed */
+            max-height: 400px; /* Adjust the height as needed */
+        }
+        #workButton {
+            margin-top: 20px;
+        }
+        #balanceDisplay, #clickCountDisplay {
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <div class="container">
+            <div class="header-text">
+                <script>
+                    var balance = 0;
+                    var totalEarned = 0;
+                    var wage = 16640;
+                    var customEarnings = 0;
+                    var customClicks = 0;
+                    var cumulativeClicks = 0;
+                    
+                    function updateText(id, initialText, variable) {
+                        document.getElementById(id).textContent = initialText + variable;
+                    }
+                    function earnMoney() {
+                        balance = balance + wage;
+                        totalEarned = totalEarned + wage;
+                        customClicks++;
+                        cumulativeClicks++;
+                        updateText("balanceDisplay", "Money: $", balance);
+                        updateText("clickCountDisplay", "Click Count: ", cumulativeClicks);
+                    }
+                    function spendMoney(amt) {
+                        balance = balance - amt;
+                        updateText("balanceDisplay", "Money: $", balance);
+                    }
+                    function goToCollege() {
+                        if (balance >= 600) {
+                            wage = 27;
+                            spendMoney(600);
+                            updateText("bottomText", "You got a raise!", "");
+                            updateText("button0", "Go to Work (+$", wage + ")");
+                            decreaseBalanceOnGraph(600); // Decrease balance on the graph
+                        } else {
+                            updateText("bottomText", "Not enough money to go to college!", "");
+                        }
+                    }
+                </script>
+            </div>
+    </div>
+    <div id="graph"> <div class="graph-text">
+    <h2>Economic Growth Over Time</h2>
+    <canvas id="myChart"></canvas>
+    <div id="workButton"> <div class="workButton-text">
+        <h1 id="startButtonArea"><button id="startButton" onclick="startGraph()">Start</button></h1>
+        <h1><button id="button0" onclick="earnMoney()">Go to Work (+$<script>document.write(wage)</script>)</button></h1>
+        <h3 id="balanceDisplay">Money: $<script>document.write(balance)</script></h3>
+        <h3 id="clickCountDisplay">Click Count: <script>document.write(cumulativeClicks)</script></h3>
+    </div></div>
+    
+    <script>
+        const years = Array.from({ length: 78 }, (_, i) => 2023 + i);
+        
+        let sanJoaquinData = [
+            44185.97554158, 89181.05457087, 134985.23708786, 181598.52309256, 
+            229020.91258497, 277252.40556509, 326293.00203291, 376142.70198844, 
+            426801.50543168, 478269.41236262, 530546.42278127, 583632.53668763, 
+            637527.7540817, 692232.07496347, 747745.49933295, 804068.02719014, 
+            861199.65853504, 919140.39336764, 977890.23168795, 1037449.17349597, 
+            1097817.21879169, 1158994.36757512, 1220980.61984626, 1283775.97560511, 
+            1347380.43485166, 1411793.99758592, 1477016.66380789, 1543048.43351757, 
+            1609889.30671495, 1677539.28340004, 1745998.36357284, 1815266.54723334, 
+            1885343.83438155, 1956230.22501747, 2027925.7191411, 2100430.31675243, 
+            2173744.01785147, 2247866.82243822, 2322798.73051268, 2398539.74207484, 
+            2475089.85712471, 2552449.07566229, 2630617.39768757, 2709594.82320056, 
+            2789381.35220126, 2869976.98468967, 2951381.72066578, 3033595.5601296, 
+            3116618.50308113, 3200450.54952036, 3285091.69944731, 3370541.95286196, 
+            3456801.30976431, 3543869.77015438, 3631747.33403215, 3720434.00139763, 
+            3809929.77225081, 3900234.64659171, 3991348.62442031, 4083271.70573662, 
+            4176003.89054063, 4269545.17883235, 4363895.57061178, 4459055.06587892, 
+            4555023.66463376, 4651801.36687632, 4749388.17260657, 4847784.08182454, 
+            4946989.09453021, 5047003.21072359, 5147826.43040468, 5249458.75357348, 
+            5351900.18022998, 5455150.71037419, 5559210.3440061, 5664079.08112573, 
+            5769756.92173306
+        ];
+
+        let bayAreaData = [
+            74285.26415094, 150044.24497808, 227276.94248142, 305983.35666095, 
+            386163.48751668, 467817.3350486, 550944.89925672, 635546.18014103, 
+            721621.17770154, 809169.89193825, 898192.32285115, 988688.47044025, 
+            1080658.33470555, 1174101.91564704, 1269019.21326472, 1365410.22755861, 
+            1463274.95852868, 1562613.40617496, 1663425.57049743, 1765711.45149609, 
+            1869471.04917096, 1974704.36352201, 2081411.39454927, 2189592.14225272, 
+            2299246.60663236, 2410374.7876882, 2522976.68542024, 2637052.29982848, 
+            2752601.6309129, 2869624.67867353, 2988121.44311035, 3108091.92422337, 
+            3229536.12201258, 3352454.03647799, 3476845.66761959, 3602711.0154374, 
+            3730050.07993139, 3858862.86110158, 3989149.35894797, 4120909.57347056, 
+            4254143.50466934, 4388851.15254431, 4525032.51709549, 4662687.59832285, 
+            4801816.39622642, 4942418.91080618, 5084495.14206213, 5228045.08999429, 
+            5373068.75460263, 5519566.13588718, 5667537.23384792, 5816982.04848485, 
+            5967900.57979798, 6120292.82778731, 6274158.79245283, 6429498.47379455, 
+            6586311.87181247, 6744598.98650658, 6904359.81787689, 7065594.36592339, 
+            7228302.63064609, 7392484.61204498, 7558140.31012008, 7725269.72487136, 
+            7893872.85629884, 8063949.70440252, 8235500.2691824, 8408524.55063847, 
+            8583022.54877073, 8758994.26357919, 8936439.69506385, 9115358.84322471, 
+            9295751.70806176, 9477618.289575, 9660958.58776445, 9845772.60263008, 
+            10032060.33417192
+        ];
+
+        let customEarningsData = [0];
+        let sanJoaquinIndex = 0, bayAreaIndex = 0, customIndex = 0;
+
+        const ctx = document.getElementById('myChart').getContext('2d');
+        
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: years,
+                datasets: [{
+                    label: 'San Joaquin Valley',
+                    data: [sanJoaquinData[0]],
+                    borderColor: 'blue',
+                    backgroundColor: 'lightblue',
+                    borderWidth: 2,
+                    tension: 0.4
+                },
+                {
+                    label: 'Bay Area',
+                    data: [bayAreaData[0]],
+                    borderColor: 'red',
+                    backgroundColor: 'pink',
+                    borderWidth: 2,
+                    tension: 0.4
+                },
+                {
+                    label: 'Custom Earnings',
+                    data: customEarningsData,
+                    borderColor: 'green',
+                    backgroundColor: 'lightgreen',
+                    borderWidth: 2,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                animation: {
+                    duration: 1500,
+                    easing: 'easeOutCubic'
+                },
+                scales: {
+                    x: {
+                        type: 'linear',
+                        position: 'bottom',
+                        min: 2023,
+                        max: 2100,
+                        ticks: {
+                            stepSize: 10,
+                            callback: function(value, index, values) {
+                                return Math.floor(value);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        function updateSanJoaquinEarnings() {
+            if (sanJoaquinIndex < sanJoaquinData.length - 1) {
+                sanJoaquinIndex++;
+                myChart.data.datasets[0].data.push(sanJoaquinData[sanJoaquinIndex]);
+                myChart.update();
+            }
+        }
+
+        function updateBayAreaEarnings() {
+            if (bayAreaIndex < bayAreaData.length - 1) {
+                bayAreaIndex++;
+                myChart.data.datasets[1].data.push(bayAreaData[bayAreaIndex]);
+                myChart.update();
+            }
+        }
+
+        function updateCustomEarnings() {
+            if (customIndex < sanJoaquinData.length - 1) {
+                customIndex++;
+                customEarningsData.push(customEarningsData[customEarningsData.length - 1] + (customClicks * wage));
+                customClicks = 0; // Reset clicks after updating the earnings
+                myChart.data.datasets[2].data = customEarningsData;
+                myChart.update();
+            }
+        }
+
+        function decreaseBalanceOnGraph(amount) {
+            if (customEarningsData.length > 0) {
+                customEarningsData[customEarningsData.length - 1] -= amount;
+                myChart.update();
+            }
+        }
+
+        function startGraph() {
+            setInterval(updateSanJoaquinEarnings, 1000); // Update the San Joaquin Valley line every 1 second
+            setInterval(updateBayAreaEarnings, 1000); // Update the Bay Area line every 1 second
+            setInterval(updateCustomEarnings, 1000); // Update the Custom Earnings line every 1 second
+            document.getElementById("startButtonArea").textContent = "";
+        }
+    </script>
+    </div></div>
+    <div id="optionButton"> <div class="optionButton-text">
+    <h2><button id="optionButton" onclick="goToCollege()">Get a Bachelor's Degree (-$600)</button></h2>
+    </div></div>
+    </div>
+</body>
+</html>
